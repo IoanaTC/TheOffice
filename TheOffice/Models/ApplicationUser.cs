@@ -7,17 +7,17 @@ namespace TheOffice.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        [Required(ErrorMessage ="Last Name field is required")]
+        [Required(ErrorMessage ="Prenumele este obligatoriu")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage ="First Name field is required")]
+        [Required(ErrorMessage ="Numele este obligatoriu")]
         public string LastName { get; set; }
 
         // username ales de utilizator
-        [Required(ErrorMessage ="Username field is required")]
+        [Required(ErrorMessage ="Trebuie sa introduceti un username")]
         public override string UserName { get; set; }
 
-        [Required(ErrorMessage ="Birthday field is rquired")]
+        [Required(ErrorMessage ="Trebuie sa introduceti data nasterii dvs")]
         public DateTime Birthday;
 
         public string? ProfilePhoto { get; set; }
