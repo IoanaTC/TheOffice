@@ -15,7 +15,6 @@ namespace TheOffice.Data
         public DbSet<Project> Projects;
         public DbSet<Comment> Comments;
         public DbSet<Task> Tasks;
-
         public DbSet<ApplicationUser> ApplicationUsers;
         public DbSet<UserProject> UserProjects;
 
