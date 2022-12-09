@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TheOffice.Models;
+using Task = TheOffice.Models.Task;
 
 namespace TheOffice.Data
 {
@@ -10,6 +11,10 @@ namespace TheOffice.Data
             : base(options)
         {
         }
+        
+        public DbSet<Project> Projects;
+        public DbSet<Comment> Comments;
+        public DbSet<Task> Tasks;
 
         public DbSet<ApplicationUser> ApplicationUsers;
         public DbSet<UserProject> UserProjects;
