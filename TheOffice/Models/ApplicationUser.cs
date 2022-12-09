@@ -13,6 +13,7 @@ namespace TheOffice.Models
         [Required(ErrorMessage ="First Name field is required")]
         public string LastName { get; set; }
 
+        // username ales de utilizator
         [Required(ErrorMessage ="Username field is required")]
         public override string UserName { get; set; }
 
@@ -22,13 +23,14 @@ namespace TheOffice.Models
         public string? ProfilePhoto { get; set; }
         public string? Description { get; set; }
 
-        // legatura cu tabelul echipe
-        public virtual ICollection<UserTeam>? UserTeams { get; set; }
+        // legatura cu tabelul proiecte
+        public virtual ICollection<UserProject>? UserProjects { get; set; }
 
-        public virtual ICollection<Team>? Teams { get; set; }
-        public virtual ICollection<TheOffice.Models.Task>? Tasks { get; set; }
+        // liste de taskuri si comentarii ale fiecarui user
+        public virtual ICollection<Task>? Tasks { get; set; }
         public virtual ICollection<Comment>? Comments { get; set; }
 
+        // lista cu roluri, adminul poate asigna/revoca roluri
         [NotMapped]
         public IEnumerable<SelectListItem>? AllRoles { get; set; }
     }
