@@ -1,0 +1,17 @@
+﻿@model TheOffice.Models.Project
+
+@if (ViewBag.Message != null)
+{
+    <h2 class="alert-success">@ViewBag.Message</h2>
+}
+<br />
+
+<h2>@Model.Title</h2><br />
+<h4>@Model.Description</h4><br />
+
+<h3>Membrii echipei</h3><br />
+@foreach (ApplicationUser member in ViewBag.Members){
+    <h4>@member.Email</h4> <br />
+}
+
+<a href="/Projects/EditMembers/@Model.Id" class="btn btn-outline-warning m-2">Edit Members</a>

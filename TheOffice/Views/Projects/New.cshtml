@@ -1,0 +1,25 @@
+﻿@model TheOffice.Models.Project
+
+<h2 class="text-center">Add a Project!</h2>
+
+<br />
+
+<div class="container">
+
+    <form enctype="multipart/form-data" asp-controller="Projects" asp-action="New">
+
+        <partial name="ProjectForm" model=@Model />
+
+        <label> Please select Users </label>
+        <br />
+        @foreach (SelectListItem user in ViewBag.Users)
+        {
+            <input name="Users" type="checkbox" value="@user.Value" /> @user.Text
+
+            <br />
+        }
+        <br />
+
+        <button class="btn btn-success" type="submit"> Add </button>
+    </form>
+</div>

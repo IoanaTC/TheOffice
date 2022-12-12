@@ -1,0 +1,20 @@
+﻿@model TheOffice.Models.Project
+
+@Html.LabelFor(project=>project.Title, "Title")
+@Html.TextBoxFor(project=>project.Title, null, new {@class = "form-control"})
+@Html.ValidationMessageFor(project=>project.Title, null, new {@class = "text-danger"})
+
+<br />
+
+@Html.LabelFor(project=>project.Deadline, "Deadline")
+@Html.TextBoxFor(project=>project.Deadline, null, new {@class ="form-control"})
+<br />
+
+@Html.LabelFor(project=>project.Description, "Descriere")
+@Html.TextBoxFor(project=>project.Description, null, new {@class ="form-control"})
+@Html.ValidationMessageFor(project=>project.Description, null, new {@class = "text-danger"})
+<br />
+
+@Html.LabelFor(project=>project.Photo, "Cover")
+<input class="form-control" type="file" name="projectPhoto" />
+<br />

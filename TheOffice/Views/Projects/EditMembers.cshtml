@@ -1,0 +1,22 @@
+﻿
+<h2>Editeaza echipa</h2><br />
+
+<form enctype="multipart/form-data" asp-controller="Projects" asp-action="EditMembers">
+
+    @foreach (SelectListItem user in ViewBag.Users)
+    {
+        @if(ViewBag.currentUsers.Contains(@user.Value))
+            {
+                <input name="newUsers" type="checkbox" value="@user.Value" checked/> @user.Text 
+            }
+        else
+           {
+                <input name="newUsers" type="checkbox" value="@user.Value" /> @user.Text
+           } 
+
+        <br />
+    }
+    <button class="btn btn-success" type="submit"> Submit </button>
+
+</form>
+<br />

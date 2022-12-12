@@ -1,0 +1,24 @@
+﻿
+@if (ViewBag.Message != null)
+{
+    <h2 class="alert-success">@ViewBag.Message</h2>
+}
+<br />
+
+<h1 class="text-success">Hello, @User.Identity?.Name</h1>
+<br />
+<h2 class="text-secondary">This is your library</h2>
+<br>
+<div class="d-inline-flex justify-content-center">
+
+    @foreach (TheOffice.Models.UserProject project in ViewBag.Projects)
+    {
+
+        <div class="card m-4" style="width: 18rem;">
+
+            <partial name="ProjectCard" model="project"></partial>
+
+        </div>
+    }
+
+</div>
