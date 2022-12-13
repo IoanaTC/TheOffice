@@ -1,0 +1,15 @@
+﻿@*Project Cards partial view*@
+
+
+<img class="card-img-top" src="@Model.Project.Photo" alt="Card image cap">
+
+<div class="card-body">
+
+    <h4 class="card-title text-info">@Model.Project.Title</h4>
+    <h5 class="text-secondary">@Model.Project.Description</h5><br />
+
+    <a href="/Projects/Edit/@Model.ProjectId" class="btn btn-outline-warning m-2">Edit</a>
+    <a href="/Projects/Show/@Model.ProjectId" class="btn btn-outline-primary m-2">Read</a>
+    <a href="/Projects/Delete/@Model.ProjectId" class="btn btn-outline-danger m-2">Delete</a>
+</div>
+

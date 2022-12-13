@@ -22,7 +22,6 @@ namespace TheOffice.Models
         public string? OrganizatorId { get; set; }
 
         public string? Photo { get; set; }
-        public virtual ICollection<UserProject>? UserProjects { get; set; }
 
         public virtual ICollection<Task>? Tasks { get; set; }
 

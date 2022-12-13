@@ -11,13 +11,12 @@ namespace TheOffice.Data
             : base(options)
         {
         }
-        
-        public DbSet<Project> Projects;
-        public DbSet<Comment> Comments;
-        public DbSet<Task> Tasks;
 
-        public DbSet<ApplicationUser> ApplicationUsers;
-        public DbSet<UserProject> UserProjects;
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Task> Tasks { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<UserProject> UserProjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
