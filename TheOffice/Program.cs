@@ -18,6 +18,14 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+//Pentru roluri
+//variabila scope cu Service Provider folosit pentru a injecta dependentele 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    SeedData.Initialize(services);
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
