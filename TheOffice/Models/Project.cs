@@ -25,6 +25,9 @@ namespace TheOffice.Models
         public virtual ICollection<UserProject>? UserProjects { get; set; }
 
         public virtual ICollection<Task>? Tasks { get; set; }
+
+        // legatura cu tabelul user
+        public virtual ICollection<UserProject>? UserProjects { get; set; }
     }
 }
 
