@@ -1,0 +1,15 @@
+﻿@model TheOffice.Models.Project
+
+<h2 class="text-center">Edit a Project!</h2>
+
+<br />
+
+<div class="container">
+
+    <form enctype="multipart/form-data" asp-controller="Projects" asp-action="Edit">
+
+        <partial name="ProjectForm" model=@Model />
+
+        <button class="btn btn-success" type="submit"> Edit </button>
+    </form>
+</div>
