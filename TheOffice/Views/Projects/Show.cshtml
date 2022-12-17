@@ -1,4 +1,5 @@
 ﻿@model TheOffice.Models.Project
+@using Task = TheOffice.Models.Task
 
 @if (ViewBag.Message != null)
 {
@@ -10,8 +11,41 @@
 <h4>@Model.Description</h4><br />
 
 <h3>Membrii echipei</h3><br />
-@foreach (ApplicationUser member in ViewBag.Members){
-    <h4>@member.Email</h4> <br />
-}
 
-<a href="/Projects/EditMembers/@Model.Id" class="btn btn-outline-warning m-2">Edit Members</a>
+<div class="d-inline-flex justify-content-center">
+
+    @foreach (ApplicationUser member in ViewBag.Members)
+    {
+        <div class="card m-4" style="width: 18rem;">
+
+            <h4>@member.Email</h4>
+
+            <div class="d-block">
+                @foreach (Task task in member.Tasks)
+                {
+                    <partial name="TaskCard" model="task"></partial>
+                }
+                <br />
+            </div>
+        </div>
+    }
+    <div class="card m-4" style="width: 18rem;">
+
+        <div class="d-block">
+            @foreach (Task task in ViewBag.Tasks)
+            {
+                <partial name="TaskCard" model="task"></partial>
+            }
+            <br />
+        </div>
+    </div>
+
+</div>
+<br />
+
+<br />
+@if (ViewBag.isAdmin == true || ViewBag.isOrganizator == true)
+{
+    <a href="/Projects/Edit/@Model.Id" class="btn btn-outline-warning m-2">Edit</a>
+    <a href="/Projects/Delete/@Model.Id" class="btn btn-outline-danger m-2">Delete</a>
+}

@@ -4,7 +4,7 @@ using TheOffice.Models;
 
 namespace TheOffice.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : Controller 
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -15,6 +15,10 @@ namespace TheOffice.Controllers
 
         public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Projects");
+            }
             return View();
         }
 

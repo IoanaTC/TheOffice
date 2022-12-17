@@ -9,6 +9,7 @@
     <form enctype="multipart/form-data" asp-controller="Projects" asp-action="Edit">
 
         <partial name="ProjectForm" model=@Model />
+        <a href="/Projects/EditMembers/@Model.Id" class="btn btn-outline-warning m-2">Edit Members</a>
 
         <button class="btn btn-success" type="submit"> Edit </button>
     </form>
