@@ -338,8 +338,7 @@ namespace TheOffice.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("Deadline")
-                        .IsRequired()
+                    b.Property<DateTime>("Deadline")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ProjectId")
@@ -349,7 +348,6 @@ namespace TheOffice.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("StatusId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -470,9 +468,7 @@ namespace TheOffice.Data.Migrations
 
                     b.HasOne("TheOffice.Models.Status", "Status")
                         .WithMany("Tasks")
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StatusId");
 
                     b.HasOne("TheOffice.Models.ApplicationUser", "User")
                         .WithMany("Tasks")

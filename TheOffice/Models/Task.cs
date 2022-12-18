@@ -21,7 +21,7 @@ namespace TheOffice.Models
         [Required(ErrorMessage = "Deadline-ul task-ului este obligatoriu")]
         public DateTime? Deadline { get; set; }
 
-       // [Required(ErrorMessage = "Statusul este obligatoriu")]
+        [Required(ErrorMessage = "Statusul este obligatoriu")]
         public int? StatusId { get; set; }
         public string? Attachment { get; set; }
 

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System.Data;
 using System.Linq;
 using System.Runtime.Intrinsics.Arm;
+using System.Threading.Tasks;
 using TheOffice.Data;
 using TheOffice.Models;
 using Task = TheOffice.Models.Task;
@@ -120,12 +121,24 @@ namespace TheOffice.Controllers
         [Authorize(Roles = "Organizator,Admin")]
         public IActionResult New()
         {   
-            Task task = new Task();
-            task.Stat = GetAllStatuses();
-
             var projectid = Convert.ToInt32(HttpContext.Request.Query["project"]);
-            task.ProjectId = projectid;
-            return View(task);
+            var project = db.Projects.Find(projectid);
+
+
+            // verificare daca userul e admin sau organizatorul proiectului curent
+            if (User.IsInRole("Admin") || project.OrganizatorId == _userManager.GetUserId(User))
+            {
+                Task task = new Task();
+                task.ProjectId = projectid;
+
+                task.Stat = GetAllStatuses();
+                return View(task);
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa creati un nou task!";
+                return Redirect("/Projects/Show/" + projectid);
+            }
         }
 
         // Se adauga task-ul in baza de date
@@ -135,32 +148,37 @@ namespace TheOffice.Controllers
         [HttpPost]
         public IActionResult New(Task task)
         {
-            //task.ProjectId = task.Project.Id;
-            //task.ProjectId = id;  //!!de facut mai tarziu preluarea id-ului
-            task.StatusId = 1;
-            task.StartDate = null;
-            task.Stat = GetAllStatuses();
-            /*var organizatorId = from tsk in db.Tasks join project in db.Projects on task.ProjectId equals project.Id
+            var organizatorId = from tsk in db.Tasks
+                                join project in db.Projects on task.ProjectId equals project.Id
                                 where tsk.Id == task.Id
-                                select project.OrganizatorId;*/
+                                select project.OrganizatorId;
 
-            //verificare daca organizatorul care creeaza task-ul este organizatorul proiectului respectiv--
-            //string organizator = organizatorId.ToString();
-            //string organizator = task.Project.OrganizatorId.ToString();
+            //verificare daca organizatorul care creeaza task-ul este organizatorul proiectului respectiv
+            if (User.IsInRole("Admin") || organizatorId.ToString() == _userManager.GetUserId(User))
+            {
+                task.StatusId = 1;
+                task.StartDate = null;
 
+                task.Stat = GetAllStatuses();
 
-            if (ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     db.Tasks.Add(task);
                     db.SaveChanges();
                     TempData["message"] = "Task-ul a fost adaugat";
                     return Redirect("/Tasks/Show/" + task.Id);
                 }
-            else
+                else
                 {
-                     task.Stat = GetAllStatuses();
-                     return View(task);
+                    task.Stat = GetAllStatuses();
+                    return View(task);
                 }
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa creati un nou task!";
+                return Redirect("/Tasks/Show/" + task.Id);
+            }
         }
 
         // Se editeaza un task existent in baza de date
@@ -276,7 +294,7 @@ namespace TheOffice.Controllers
 
             if (members.Contains(_userManager.GetUserId(User)) || User.IsInRole("Admin"))
             {
-                if (ModelState.IsValid)
+                if (requestTask.StatusId != null)
                 {
                     task.StatusId = requestTask.StatusId;
                     if (task.Status.Status_Value == "In Progress")
@@ -296,7 +314,6 @@ namespace TheOffice.Controllers
                 {
                     requestTask.Stat = GetAllStatuses();
                     return View(requestTask);
-
                 }
             }
             else
