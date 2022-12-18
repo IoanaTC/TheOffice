@@ -1,0 +1,131 @@
+﻿@model TheOffice.Models.Task
+
+<h2>@ViewBag.Msg</h2>
+
+<h2>@Model.Title</h2>
+<br />
+<h5>Task-ul face parte din proiectul: @Model.Project.Title</h5>
+@if (@Model.User.FirstName != null){
+    <h5>Responsabilitate task: @Model.User.FirstName</h5>
+}
+else{
+    <h5>Acest task nu este inca asignat!</h5>
+}
+<h3>@Model.Content</h3>
+<br />
+
+@if (@Model.StartDate != null){
+    <h5>Start Date: @Model.StartDate</h5>
+}
+
+<h5>Deadline: @Model.Deadline</h5>
+<h5>Status: @Model.Status.Status_Value</h5>
+
+<a href="/Tasks/EditStatus/@Model.Id" class="btn btn-outline-warning m-2">Edit Status</a>
+
+@if (ViewBag.AfisareButoane || ViewBag.EsteAdmin)
+{
+    <a href="/Tasks/Edit/@Model.Id" class="btn btn-outline-warning m-2">Edit Task</a>
+    <a href="/Tasks/Delete/@Model.Id" class="btn btn-outline-danger m-2">Delete Task</a>
+}
+
+<h4>Comentarii</h4>
+<br />
+
+@* Afisare comentarii impreuna cu butoanele de editare si stergere *@
+
+@foreach (var comm in Model.Comments)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+
+            <div class="col-md-8">
+
+                <div>
+
+                    <p>@comm.Content</p>
+                    <small>@comm.Date</small>
+                    <strong><i class="bi bi-person"></i>@comm.User.UserName</strong>
+
+                </div>
+                <br>
+
+
+                @if (comm.UserId == ViewBag.UserCurent || ViewBag.EsteAdmin)
+                {
+                    <div class="d-flex">
+
+                        <div>
+
+                        <a class="btn btn-outline-warning m-2" href="/Comments/Edit/@comm.Id"><i class="bi bi-pencil-square"></i>Editeaza</a>
+
+                        </div>
+
+                        <div>
+
+                            <form method="post" action="/Comments/Delete/@comm.Id">
+
+                                <button class="btn btn-outline-danger m-2" type="submit"><i class="bi bi-trash"></i>Sterge</button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                }
+
+                <br />
+
+            </div>
+
+            <div class="col-md-2"></div>
+
+        </div>
+
+    </div>
+}
+
+
+@* Afisarea formularului in care se poate adauga un comentariu *@
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8">
+
+            <div class="card">
+
+                <form method="post" action="/Tasks/Show/@Model.Id">
+
+                    <div class="card-body">
+
+                        <input type="hidden" name="TaskId" value="@Model.Id" />
+
+                        <label>Continut comentariu</label>
+                        <br />
+
+                        <textarea class="form-control" name="Content"></textarea>
+
+                        @Html.ValidationMessage("Content", null, new { @class = "text-danger"})
+
+                        <br /><br />
+
+                        <button class="btn btn-outline-primary m-2" type="submit">Adauga comentariul</button>
+                        
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-2"></div>
+
+    </div>
+
+</div>

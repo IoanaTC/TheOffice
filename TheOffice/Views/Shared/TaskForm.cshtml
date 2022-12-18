@@ -1,0 +1,18 @@
+﻿@model TheOffice.Models.Task
+
+@Html.LabelFor(task=>task.Title, "Title")
+@Html.TextBoxFor(task=>task.Title, null, new {@class = "form-control"})
+@Html.ValidationMessageFor(task=>task.Title, null, new {@class = "text-danger"})
+<br />
+
+
+@Html.LabelFor(task=>task.Content, "Descrierea task-ului")
+@Html.TextBoxFor(task=>task.Content, null, new {@class ="form-control"})
+@Html.ValidationMessageFor(task=>task.Content, null, new {@class = "text-danger"})
+<br />
+
+@Html.LabelFor(task=>task.Deadline, "Deadline")
+@Html.TextBoxFor(task=>task.Deadline, null, new {@class ="form-control"})
+<br />
+
+

@@ -17,6 +17,7 @@ namespace TheOffice.Data
         public DbSet<Task> Tasks { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<UserProject> UserProjects { get; set; }
+        public DbSet<Status> Statuses { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

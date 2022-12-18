@@ -54,7 +54,7 @@ namespace TheOffice.Controllers
             // verificam daca exista vreun TempData neafisat
             // daca exista, il afisam
             if (TempData.ContainsKey("message"))
-                ViewBag.Message = TempData["message"];
+                ViewBag.Message = TempData["message"].ToString();
 
             return View();
         }
@@ -257,9 +257,9 @@ namespace TheOffice.Controllers
         public IActionResult Delete(int? id)
         {
             // selectam proiectul ce urmeaza a fi sters
-            Project project = db.Projects
-                                .Where(project => project.Id == (int)id)
-                                .First();
+            Project project = db.Projects.Include("Tasks")
+                                          .Where(project => project.Id == (int)id)
+                                          .First();
 
             // il stergem
             db.Projects.Remove(project);
