@@ -78,7 +78,7 @@ namespace TheOffice.Controllers
 
             else
             {
-                TempData["message"] = "Nu aveti dreptul sa vizualizati task-ul!";
+                TempData["message"] = "Nu aveti acces la acest task!";
                 return Redirect("/Projects/Index/");
             }
         }
@@ -135,9 +135,10 @@ namespace TheOffice.Controllers
         public IActionResult New(Task task)
         {
             //task.ProjectId = task.Project.Id;
-            task.ProjectId = 1;  //!!de facut mai tarziu preluarea id-ului
+            task.ProjectId = 3;  //!!de facut mai tarziu preluarea id-ului
             task.StatusId = 1;
             task.StartDate = null;
+            task.Stat = GetAllStatuses();
             /*var organizatorId = from tsk in db.Tasks join project in db.Projects on task.ProjectId equals project.Id
                                 where tsk.Id == task.Id
                                 select project.OrganizatorId;*/
@@ -168,20 +169,23 @@ namespace TheOffice.Controllers
         public IActionResult Edit(int id)
         {
 
-            Task task = db.Tasks.Include("Project")
-                                        .Where(tsk => tsk.Id == id)
-                                        .First();
+            Task task = db.Tasks.Include("Comments")
+                                 .Include("Project")
+                                 .Where(tsk => tsk.Id == id)
+                                 .First();
 
-            //if (task.Project.OrganizatorId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
-            //{
+            task.Stat = GetAllStatuses();
+
+            if (task.Project.OrganizatorId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+            {
                 return View(task);
-           // }
+            }
 
-            //else
-            //{
-               // TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra acestui task!";
-               // return RedirectToAction("/Task/Show/" + id);
-            //}
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra acestui task!";
+                return Redirect("/Projects/Index/");
+            }
 
         }
 
@@ -193,29 +197,28 @@ namespace TheOffice.Controllers
             Task task = db.Tasks.Include("Project")
                                         .Where(tsk => tsk.Id == id)
                                         .First();
-
-
-            if (ModelState.IsValid)
+            task.Stat = GetAllStatuses();
+            if (task.Project.OrganizatorId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
             {
-                //validarea organizatorului
-                //if (task.Project.OrganizatorId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
-                //
+                if (ModelState.IsValid)
+                {
                     task.Title = requestTask.Title;
                     task.Content = requestTask.Content;
                     task.Deadline = requestTask.Deadline;
                     TempData["message"] = "Task-ul a fost modificat";
                     db.SaveChanges();
                     return Redirect("/Tasks/Show/" + id);
-                //}
-                //else
-                //{
-                   // TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui acestui task!";
-                   // return RedirectToAction("/Task/Show/" + id);
-               // }
+                }
+                else
+                {
+                    task.Stat = GetAllStatuses();
+                    return View(requestTask);
+                }
             }
             else
             {
-                return View(requestTask);
+                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra acestui task!";
+                return Redirect("/Projects/Index/");
             }
         }
 
@@ -230,8 +233,25 @@ namespace TheOffice.Controllers
             // Se preia lista de statusuri 
             task.Stat = GetAllStatuses();
 
+            //preiau membrii proiectului respectiv
+            var members = new List<string>();
 
-            return View(task);
+            var project_users = db.UserProjects.Include("User")
+                                .Where(up => up.ProjectId == task.ProjectId);
+
+            foreach (UserProject user in project_users)
+                members.Add(user.UserId);
+
+            if (members.Contains(_userManager.GetUserId(User)) || User.IsInRole("Admin"))
+            {
+                return View(task);
+            }
+
+            else
+            {
+                TempData["message"] = "Nu aveti acces sa editati statusul!";
+                return Redirect("/Projects/Index/");
+            }
         }
 
         // Se modifica statusul cu noua valoare
@@ -242,29 +262,46 @@ namespace TheOffice.Controllers
             Task task = db.Tasks.Include("Status")
                                         .Where(tsk => tsk.Id == id)
                                         .First();
+            
+            task.Stat = GetAllStatuses();
 
+            var members = new List<string>();
 
-            if (ModelState.IsValid)
+            var project_users = db.UserProjects.Include("User")
+                                .Where(up => up.ProjectId == task.ProjectId);
+
+            foreach (UserProject user in project_users)
+                members.Add(user.UserId);
+
+            if (members.Contains(_userManager.GetUserId(User)) || User.IsInRole("Admin"))
             {
+                if (ModelState.IsValid)
+                {
                     task.StatusId = requestTask.StatusId;
-                    if (task.Status.Status_Value == "In Progress") 
+                    if (task.Status.Status_Value == "In Progress")
                     {
-                       task.StartDate = DateTime.Now;
+                        task.StartDate = DateTime.Now;
                     }
 
-                    if(task.Status.Status_Value == "Not Started")  // Back to Not Started
+                    if (task.Status.Status_Value == "Not Started")  // Back to Not Started
                     {
                         task.StartDate = null;
                     }
                     TempData["message"] = "Statusul a fost modificat!";
                     db.SaveChanges();
                     return Redirect("/Tasks/Show/" + task.Id);
+                }
+                else
+                {
+                    requestTask.Stat = GetAllStatuses();
+                    return View(requestTask);
+
+                }
             }
             else
             {
-                requestTask.Stat = GetAllStatuses();
-                return View(requestTask);
-          
+                TempData["message"] = "Nu aveti acces sa editati statusul!";
+                return Redirect("/Projects/Index/");
             }
         }
 
@@ -281,14 +318,14 @@ namespace TheOffice.Controllers
             {
                 db.Tasks.Remove(task);
                 db.SaveChanges();
-                TempData["message"] = "Task-ul a fost sters";
+                TempData["message"] = "Task-ul a fost sters cu succes!";
                 return Redirect("/Projects/Show/" + task.ProjectId);
             }
 
             else
             {
                 TempData["message"] = "Nu aveti dreptul sa stergeti acest task!";
-                return Redirect("/Tasks/Show/" + task.Id);
+                return Redirect("/Projects/Index/");
             }
         }
 
