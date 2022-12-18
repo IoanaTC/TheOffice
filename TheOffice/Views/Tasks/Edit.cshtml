@@ -1,0 +1,16 @@
+﻿@model TheOffice.Models.Task
+
+<h2 class="text-center">Edit Task!</h2>
+
+<br />
+
+<div class="container">
+
+    <form enctype="multipart/form-data" asp-controller="Tasks" asp-action="Edit">
+
+        <partial name="TaskForm" model=@Model />
+
+        <button class="btn btn-outline-warning m-2" type="submit"> Edit </button>
+        
+    </form>
+</div>

@@ -8,6 +8,7 @@ namespace TheOffice.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Continutul comentariului este obligatoriu")]
+        [MinLength(5, ErrorMessage = "Continutul trebuie sa aiba cel putin de 5 caractere")]
         public string Content { get; set; }
 
         public DateTime Date { get; set; }

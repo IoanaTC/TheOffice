@@ -84,7 +84,7 @@ namespace TheOffice.Controllers
             // verificam daca exista vreun TempData neafisat
             // daca exista, il afisam
             if (TempData.ContainsKey("message"))
-                ViewBag.Message = TempData["message"];
+                ViewBag.Message = TempData["message"].ToString();
 
             return View();
         }
@@ -139,6 +139,9 @@ namespace TheOffice.Controllers
                 // verificam daca nr de participanti dintr-o echipa a fost modificat
                 if (TempData.ContainsKey("members"))
                     ViewBag.Message = TempData["members"];
+
+                if (TempData.ContainsKey("message_task"))
+                    ViewBag.Message_task = TempData["message_task"].ToString();
 
                 // modfic view-ul a.i fiecare utilizator sa vada doar butoanele permise in functie de rol
                 SetAccesRights(project.OrganizatorId);
@@ -336,9 +339,9 @@ namespace TheOffice.Controllers
             currentUserId = _userManager.GetUserId(User);
 
             // selectam proiectul ce urmeaza a fi sters
-            Project project = db.Projects
-                                .Where(project => project.Id == (int)id)
-                                .First();
+            Project project = db.Projects.Include("Tasks")
+                                          .Where(project => project.Id == (int)id)
+                                          .First();
 
             // doar adminul si organizatorul echipei pot sterge un proiect
             if (project.OrganizatorId == currentUserId || User.IsInRole("Admin"))

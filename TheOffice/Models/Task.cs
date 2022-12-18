@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TheOffice.Models
 {
@@ -14,11 +16,13 @@ namespace TheOffice.Models
         [Required(ErrorMessage = "Descrierea task-ului este obligatorie")]
         public string Content { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        public DateTime Deadline { get; set; }
-        public string Status { get; set; }
+        [Required(ErrorMessage = "Deadline-ul task-ului este obligatoriu")]
+        public DateTime? Deadline { get; set; }
 
+        //[Required(ErrorMessage = "Statusul este obligatoriu")]
+        public int? StatusId { get; set; }
         public string? Attachment { get; set; }
 
         public int? ProjectId { get; set; }
@@ -28,7 +32,12 @@ namespace TheOffice.Models
 
         public virtual Project? Project { get; set; }
 
+        public virtual Status? Status { get; set; }
+
         public virtual ICollection<Comment>? Comments { get; set; }
+
+        [NotMapped]
+        public IEnumerable<SelectListItem>? Stat { get; set; }
 
     }
 }

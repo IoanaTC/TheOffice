@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheOffice.Data;
 
@@ -11,9 +12,10 @@ using TheOffice.Data;
 namespace TheOffice.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221217142511_AddStatus3")]
+    partial class AddStatus3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,7 +271,7 @@ namespace TheOffice.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("TheOffice.Models.Project", b =>
@@ -303,7 +305,7 @@ namespace TheOffice.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects", (string)null);
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("TheOffice.Models.Status", b =>
@@ -320,7 +322,7 @@ namespace TheOffice.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Statuses", (string)null);
+                    b.ToTable("Statuses");
                 });
 
             modelBuilder.Entity("TheOffice.Models.Task", b =>
@@ -338,8 +340,7 @@ namespace TheOffice.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("Deadline")
-                        .IsRequired()
+                    b.Property<DateTime>("Deadline")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ProjectId")
@@ -349,7 +350,6 @@ namespace TheOffice.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("StatusId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -367,7 +367,7 @@ namespace TheOffice.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tasks", (string)null);
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("TheOffice.Models.UserProject", b =>
@@ -393,7 +393,7 @@ namespace TheOffice.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserProjects", (string)null);
+                    b.ToTable("UserProjects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -470,9 +470,7 @@ namespace TheOffice.Data.Migrations
 
                     b.HasOne("TheOffice.Models.Status", "Status")
                         .WithMany("Tasks")
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StatusId");
 
                     b.HasOne("TheOffice.Models.ApplicationUser", "User")
                         .WithMany("Tasks")
