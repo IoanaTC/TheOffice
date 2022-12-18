@@ -121,6 +121,7 @@ namespace TheOffice.Controllers
         public IActionResult New()
         {   
             Task task = new Task();
+            task.Stat = GetAllStatuses();
 
             return View(task);
 
@@ -136,6 +137,7 @@ namespace TheOffice.Controllers
             //task.ProjectId = task.Project.Id;
             task.ProjectId = 1;  //!!de facut mai tarziu preluarea id-ului
             task.StatusId = 1;
+            task.StartDate = null;
             /*var organizatorId = from tsk in db.Tasks join project in db.Projects on task.ProjectId equals project.Id
                                 where tsk.Id == task.Id
                                 select project.OrganizatorId;*/
@@ -154,7 +156,8 @@ namespace TheOffice.Controllers
                 }
             else
                 {
-                    return View(task);
+                     task.Stat = GetAllStatuses();
+                     return View(task);
                 }
         }
 
@@ -311,7 +314,7 @@ namespace TheOffice.Controllers
                 });
             }
 
-            // returnam lista de categorii
+            // returnam lista de statusuri
             return selectList;
         }
 

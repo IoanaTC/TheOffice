@@ -10,9 +10,9 @@
             routeValues: new { id = Model.Id }))
             {
                 <label>Selectati statusul</label>
-                @Html.DropDownListFor(m => m.StatusId,
-            new SelectList(Model.Stat, "Value", "Text"),
-            "Selectati statusul", new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.StatusId, new SelectList(Model.Stat, "Value", "Text"),
+                "Selectati statusul", new { @class = "form-control" })
+
                 @Html.ValidationMessageFor(m => m.StatusId, null, new { @class = "text-danger" })
                 <br />
 

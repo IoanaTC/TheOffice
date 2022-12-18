@@ -5,7 +5,7 @@
 <h2>@Model.Title</h2>
 <br />
 <h5>Task-ul face parte din proiectul: @Model.Project.Title</h5>
-@if (@Model.User.FirstName != null){
+@if (@Model.UserId != null){
     <h5>Responsabilitate task: @Model.User.FirstName</h5>
 }
 else{
