@@ -123,6 +123,8 @@ namespace TheOffice.Controllers
             Task task = new Task();
             task.Stat = GetAllStatuses();
 
+            var projectid = Convert.ToInt32(HttpContext.Request.Query["project"]);
+            task.ProjectId = projectid;
             return View(task);
         }
 
@@ -134,7 +136,7 @@ namespace TheOffice.Controllers
         public IActionResult New(Task task)
         {
             //task.ProjectId = task.Project.Id;
-            task.ProjectId = 3;  //!!de facut mai tarziu preluarea id-ului
+            //task.ProjectId = id;  //!!de facut mai tarziu preluarea id-ului
             task.StatusId = 1;
             task.StartDate = null;
             task.Stat = GetAllStatuses();
@@ -336,7 +338,7 @@ namespace TheOffice.Controllers
 
             // extragem toate statusurile din baza de date
             var statuses = from stat in db.Statuses
-                             select stat;
+                           select stat;
 
             // iteram prin statusuri
             foreach (var status in statuses)
@@ -355,6 +357,7 @@ namespace TheOffice.Controllers
         }
 
         // Conditiile de afisare a butoanelor de editare si stergere
+        [NonAction]
         private void SetAccessRights()
         {
             ViewBag.AfisareButoane = false;

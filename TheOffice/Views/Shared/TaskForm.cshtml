@@ -16,4 +16,4 @@
 @Html.ValidationMessageFor(task=>task.Deadline, null, new {@class = "text-danger"})
 <br />
 
-
+@Html.HiddenFor(task => task.ProjectId, new {@value=Model.ProjectId})

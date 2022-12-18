@@ -140,8 +140,8 @@ namespace TheOffice.Controllers
                 if (TempData.ContainsKey("members"))
                     ViewBag.Message = TempData["members"];
 
-                if (TempData.ContainsKey("message_task"))
-                    ViewBag.Message_task = TempData["message_task"].ToString();
+                if (TempData.ContainsKey("message"))
+                    ViewBag.Message_task = TempData["message"].ToString();
 
                 // modfic view-ul a.i fiecare utilizator sa vada doar butoanele permise in functie de rol
                 SetAccesRights(project.OrganizatorId);
