@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Build.Evaluation;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System.Data;
@@ -120,8 +122,8 @@ namespace TheOffice.Controllers
 
         [Authorize(Roles = "Organizator,Admin")]
         public IActionResult New()
-        {   
-            var projectid = Convert.ToInt32(HttpContext.Request.Query["project"]);
+        {
+            int projectid = Convert.ToInt32(HttpContext.Request.Query["project"]);
             var project = db.Projects.Find(projectid);
 
 
@@ -148,17 +150,13 @@ namespace TheOffice.Controllers
         [HttpPost]
         public IActionResult New(Task task)
         {
-            var organizatorId = from tsk in db.Tasks
-                                join project in db.Projects on task.ProjectId equals project.Id
-                                where tsk.Id == task.Id
-                                select project.OrganizatorId;
+            var project = db.Projects.Find(task.ProjectId);
 
             //verificare daca organizatorul care creeaza task-ul este organizatorul proiectului respectiv
-            if (User.IsInRole("Admin") || organizatorId.ToString() == _userManager.GetUserId(User))
+            if (User.IsInRole("Admin") || project.OrganizatorId == _userManager.GetUserId(User))
             {
                 task.StatusId = 1;
                 task.StartDate = null;
-
                 task.Stat = GetAllStatuses();
 
                 if (ModelState.IsValid)
@@ -177,7 +175,7 @@ namespace TheOffice.Controllers
             else
             {
                 TempData["message"] = "Nu aveti dreptul sa creati un nou task!";
-                return Redirect("/Tasks/Show/" + task.Id);
+                return Redirect("/Projects/Show/" + task.ProjectId);
             }
         }
 
