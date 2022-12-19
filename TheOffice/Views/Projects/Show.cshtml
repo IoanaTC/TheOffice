@@ -1,57 +1,88 @@
 ﻿@model TheOffice.Models.Project
 @using Task = TheOffice.Models.Task
 
-@if (ViewBag.Message != null)
-{
-    <h2 class="alert-success">@ViewBag.Message</h2>
-}
-@if (ViewBag.Message_task != null)
-{
-    <h2 class="alert-success">@ViewBag.Message_task</h2>
-}
-<br />
+<!DOCTYPE>
+<html>
 
-<h2>@Model.Title</h2><br />
-<h4>@Model.Description</h4><br />
+<header>
+    <script>
 
-<h3>Membrii echipei</h3><br />
+        function allowDrop(event){
+            event.preventDefault();
+        }
 
-<div class="d-inline-flex justify-content-center">
+        function drag(event){
+            event.dataTransfer.setData("div", event.target.id);
+        }
 
-    @foreach (ApplicationUser member in ViewBag.Members)
+        function drop(event){
+            event.preventDefault();
+            var data = event.dataTransfer.getData("div");
+            event.target.appendChild(document.getElementById(data));
+
+            //const button = event.target.getElementsByTagName("button");
+
+            //button.setAttribute("visibility", "visible");
+        }
+
+    </script>
+</header>
+<body>
+    @if (ViewBag.Message != null)
     {
-        <div class="card m-4" style="width: 18rem;">
+        <h2 class="alert-success">@ViewBag.Message</h2>
+    }
+    @if (ViewBag.Message_task != null)
+    {
+        <h2 class="alert-success">@ViewBag.Message_task</h2>
+    }
+    <br />
 
-            <h4>@member.Email</h4>
+    <h2>@Model.Title</h2><br />
+    <h4>@Model.Description</h4><br />
+
+    <h3>Membrii echipei</h3><br />
+
+    <div class="d-inline-flex justify-content-center">
+
+        @foreach (ApplicationUser member in ViewBag.Members)
+        {
+            <div id="@member.Email" ondrop="drop(event)" ondragover="allowDrop(event)" class="card m-4" style="width: 18rem;">
+
+                <h4>@member.Email</h4>
+
+                <div class="d-block">
+                    @foreach (Task task in member.Tasks)
+                    {
+                        <partial name="TaskCard" model="task"></partial>
+                    }
+                    <br />
+                </div>
+
+@*                <button class="@member.Email" style="width: 10rem; visibility:hidden" >Salveaza modificarile</button>
+*@            </div>
+        }
+        <div id="0" ondrop="drop(event)" ondragover="allowDrop(event)" class="card m-4" style="width: 18rem;">
 
             <div class="d-block">
-                @foreach (Task task in member.Tasks)
+                @foreach (Task task in ViewBag.Tasks)
                 {
                     <partial name="TaskCard" model="task"></partial>
                 }
                 <br />
             </div>
         </div>
-    }
-    <div class="card m-4" style="width: 18rem;">
 
-        <div class="d-block">
-            @foreach (Task task in ViewBag.Tasks)
-            {
-                <partial name="TaskCard" model="task"></partial>
-            }
-            <br />
-        </div>
     </div>
+    <br />
 
-</div>
-<br />
+    <br />
+    @if (ViewBag.isAdmin == true || ViewBag.isOrganizator == true)
+    {
+        <a href="/Projects/Edit/@Model.Id" class="btn btn-outline-warning m-2">Edit</a>
+        <a href="/Projects/Delete/@Model.Id" class="btn btn-outline-danger m-2">Delete</a>
+        <a href="/Tasks/New?project=@Model.Id" class="btn btn-outline-primary m-2">Add Tasks</a>
 
-<br />
-@if (ViewBag.isAdmin == true || ViewBag.isOrganizator == true)
-{
-    <a href="/Projects/Edit/@Model.Id" class="btn btn-outline-warning m-2">Edit</a>
-    <a href="/Projects/Delete/@Model.Id" class="btn btn-outline-danger m-2">Delete</a>
-    <a href="/Tasks/New?project=@Model.Id" class="btn btn-outline-primary m-2">Add Tasks</a>
-
-}
+    }
+</body>
+</html>
