@@ -295,17 +295,25 @@ namespace TheOffice.Controllers
                 if (requestTask.StatusId != null)
                 {
                     task.StatusId = requestTask.StatusId;
+
+                    //adaugam modificarea id-ului statusului in baza de date
+                    db.SaveChanges();  
+
+                    //setam data de start in functie de acesta
                     if (task.Status.Status_Value == "In Progress")
                     {
                         task.StartDate = DateTime.Now;
+                        db.SaveChanges();
+
                     }
 
                     if (task.Status.Status_Value == "Not Started")  // Back to Not Started
                     {
                         task.StartDate = null;
+                        db.SaveChanges();
                     }
+                    
                     TempData["message"] = "Statusul a fost modificat!";
-                    db.SaveChanges();
                     return Redirect("/Tasks/Show/" + task.Id);
                 }
                 else
