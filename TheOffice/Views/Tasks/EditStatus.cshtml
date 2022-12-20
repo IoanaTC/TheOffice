@@ -1,5 +1,8 @@
 ﻿@model TheOffice.Models.Task
-
+@if(ViewBag.Msg != null)
+{
+    <h2 class=" alert-danger">@ViewBag.Msg</h2>
+}
 <h2 class="text-center mt-5">Editare status</h2>
 <br />
 <div class="container mt-5">

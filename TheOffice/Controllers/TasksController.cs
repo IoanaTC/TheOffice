@@ -303,22 +303,22 @@ namespace TheOffice.Controllers
                     if (task.Status.Status_Value == "In Progress")
                     {
                         task.StartDate = DateTime.Now;
-                        db.SaveChanges();
 
                     }
 
                     if (task.Status.Status_Value == "Not Started")  // Back to Not Started
                     {
                         task.StartDate = null;
-                        db.SaveChanges();
                     }
-                    
+                    db.SaveChanges();
                     TempData["message"] = "Statusul a fost modificat!";
                     return Redirect("/Tasks/Show/" + task.Id);
                 }
                 else
                 {
                     requestTask.Stat = GetAllStatuses();
+                    TempData["message"] = "Va rugam sa alegeti un status!";
+                    ViewBag.Msg = TempData["message"].ToString();
                     return View(requestTask);
                 }
             }

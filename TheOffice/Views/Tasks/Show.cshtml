@@ -1,6 +1,9 @@
 ﻿@model TheOffice.Models.Task
 
-<h2>@ViewBag.Msg</h2>
+@if(ViewBag.Msg != null)
+{
+    <h2 class="alert-info">@ViewBag.Msg</h2>
+}
 
 <h2>@Model.Title</h2>
 <br />
