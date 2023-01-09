@@ -1,26 +1,77 @@
-﻿
-@if (ViewBag.Message != null)
-{
-    <h2 class="alert-success">@ViewBag.Message</h2>
+﻿@{
+    ViewData["Title"] = "Home Page";
 }
-<br />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/ProjectsIndex.css" asp-append-version="true" />
 
-<h1 class="text-success">Hello, @User.Identity?.Name</h1>
-<br />
-<h2 class="text-secondary">This is your library</h2>
-<br>
+</head>
 
-    <div class="d-inline-flex justify-content-center">
+<body>
 
-        @foreach (TheOffice.Models.Project project in ViewBag.Projects)
-        {
-            <div class="card m-4" style="width: 18rem;">
+    @if (ViewBag.Message != null)
+    {
+        <h2 class="alert-success">@ViewBag.Message</h2>
+    }
+    <br />
 
-                <partial name="ProjectCard" model="project"></partial>
+    <h1 class="text" >Hello, @User.Identity?.Name</h1>
+    <br />
+    <h2 class="text-secondary">This is your library</h2>
 
-            </div>
-        }
+    <br>
+  
+        <div id="display" class="d-inline-flex justify-content-center">
+            <ul>
+            @foreach (TheOffice.Models.Project project in ViewBag.Projects)
+            {
+                <li><div class="card m-4" style="width: 18rem;">
+
+                    <partial name="ProjectCard" model="project"></partial>
+
+                    </div>
+                </li>
+            }
+             </ul>
+             <br />
+        </div>
+     
+     <br />
+
+    <a href="/Projects/New" class="btn btn-outline-primary m-2">Add Project</a>
+
+    <br />
+
+    @*Afisare paginata*@
+    <div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link"
+                       href="/Projects/Index?page=1" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                @for (int i = 1; i <= ViewBag.lastPage; i++)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                       href="/Projects/Index?page=@i">@(i)</a>
+                    </li>
+                }
+
+                <li class="page-item">
+                    <a class="page-link"
+                       href="/Projects/Index?page=@(ViewBag.lastPage)" arialabel="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
- <br />
-<a href="/Projects/New" class="btn btn-outline-primary m-2">Add Project</a>
+</body>
+</html>

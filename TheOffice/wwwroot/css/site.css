@@ -1,8 +1,17 @@
-html {
-  font-size: 14px;
-}
+body {
+    margin-bottom: 60px;
+    background-image: url(/images/wallpaper6.webp);
+    
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    font-family: 'Marko One', serif;
+    font-size: 14px;
+    color: black;
+/*    background-color: #EDEAD0;
+*/}
 
-@media (min-width: 768px) {
+@media (min-width: 768px) { 
   html {
     font-size: 16px;
   }
@@ -12,7 +21,6 @@ html {
   position: relative;
   min-height: 100%;
 }
-
-body {
-  margin-bottom: 60px;
+.navbar {
+    color: black;
 }

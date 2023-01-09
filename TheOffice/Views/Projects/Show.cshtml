@@ -3,30 +3,37 @@
 
 <!DOCTYPE>
 <html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/ProjectsShow.css" asp-append-version="true" />
 
-<header>
     <script>
+        
+            function allowDrop(event){
+                event.preventDefault();
+            }
 
-        function allowDrop(event){
-            event.preventDefault();
-        }
+            function drag(event){
+                event.dataTransfer.setData("div", event.target.id);
+            }
 
-        function drag(event){
-            event.dataTransfer.setData("div", event.target.id);
-        }
+            function drop(event){
+                event.preventDefault();
+                var data = event.dataTransfer.getData("div");
+                event.target.appendChild(document.getElementById(data));
 
-        function drop(event){
-            event.preventDefault();
-            var data = event.dataTransfer.getData("div");
-            event.target.appendChild(document.getElementById(data));
-
-            //const button = event.target.getElementsByTagName("button");
-
-            //button.setAttribute("visibility", "visible");
-        }
-
+                $.ajax({
+                url: '@Url.Action( "AssignTask", "Projects")',
+                    data: { itemId: data.id,
+                            parentId: event.target.id},
+                    type: 'POST'
+                    
+                }); 
+            }
+       
     </script>
-</header>
+</head>
 <body>
     @if (ViewBag.Message != null)
     {
@@ -37,17 +44,25 @@
         <h2 class="alert-success">@ViewBag.Message_task</h2>
     }
     <br />
+    <div class="justify-content-center">
+        <div id="container-header" class="d inline-flex justify-content-center">
+            <div id="container-title"></div>
+                <h2 id="title">@Model.Title</h2><br />
+                <h4 id="content">@Model.Description</h4>
+            </div>
 
-    <h2>@Model.Title</h2><br />
-    <h4>@Model.Description</h4><br />
-
-    <h3>Membrii echipei</h3><br />
+            <img id="photo" src="@Model.Photo" />
+        </div>
+    
+    <br />
+    <h3 id="members">Membrii echipei</h3><br />
+    
 
     <div class="d-inline-flex justify-content-center">
 
         @foreach (ApplicationUser member in ViewBag.Members)
         {
-            <div id="@member.Email" ondrop="drop(event)" ondragover="allowDrop(event)" class="card m-4" style="width: 18rem;">
+            <div class="member" id="@member.Email" ondrop="drop(event)" ondragover="allowDrop(event)" class="card m-4" style="width: 18rem;">
 
                 <h4>@member.Email</h4>
 
@@ -59,8 +74,7 @@
                     <br />
                 </div>
 
-@*                <button class="@member.Email" style="width: 10rem; visibility:hidden" >Salveaza modificarile</button>
-*@            </div>
+           </div>
         }
         <div id="0" ondrop="drop(event)" ondragover="allowDrop(event)" class="card m-4" style="width: 18rem;">
 
@@ -84,5 +98,6 @@
         <a href="/Tasks/New?project=@Model.Id" class="btn btn-outline-primary m-2">Add Tasks</a>
         <a href="/Projects/EditMembers/@Model.Id" class="btn btn-outline-warning m-2">Edit Members</a>
     }
+    </div>
 </body>
 </html>

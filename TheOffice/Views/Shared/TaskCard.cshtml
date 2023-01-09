@@ -1,7 +1,7 @@
 ﻿@model TheOffice.Models.Task
 
 
-<div id="@Model.Title" draggable="true" ondragstart="drag(event)" class="card m-4" style="width: 10rem;">
+<div id="@Model.Id" draggable="true" ondragstart="drag(event)" class="card m-4" style="width: 10rem;">
 
     <h6>@Model.Title</h6>
     <a href="/Tasks/Show/@Model.Id">Vizualizeaza</a>

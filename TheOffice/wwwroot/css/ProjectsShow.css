@@ -1,0 +1,14 @@
+﻿.container-header{
+    display: flex ;
+    justify-content:center;
+    flex: 50% 50%;
+}
+.container-title{
+    flex:1;
+}
+img {
+    width: 50%;
+    height: 60%;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(80%);
+}

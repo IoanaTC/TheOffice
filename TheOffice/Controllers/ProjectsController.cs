@@ -10,6 +10,8 @@ using System.Data;
 
 using Task = TheOffice.Models.Task;
 using Project = TheOffice.Models.Project;
+using Humanizer;
+using System.Text.RegularExpressions;
 
 namespace TheOffice.Controllers
 {
@@ -54,13 +56,15 @@ namespace TheOffice.Controllers
             // selectam userul curent
             currentUserId = _userManager.GetUserId(User);
 
+            var projects = new List<Project>();
+
             if (User.IsInRole("Admin"))
             {
                 // userul este administrator => vede toate proiectele 
                 var adminProjects = db.Projects;
 
-                // trimitem toate proiectele catre view pentru admin
-                ViewBag.Projects = adminProjects;
+                foreach(var adminProject in adminProjects)
+                    projects.Add(adminProject);
             }
             else
             {
@@ -68,17 +72,14 @@ namespace TheOffice.Controllers
                 var userProjects = db.UserProjects.Include("Project")
                                      .Where(up => up.UserId == currentUserId);
 
-                var projects = new List<Project>();
-
+                
                 // userul nu este administrator => vede doar proiectele din care face parte
                 foreach (var userproject in userProjects)
                 {
                     // selectam proiectul din care face parte userul curent                    {
-                        userproject.Project = db.Projects.Where(p => p.Id == userproject.ProjectId).First();
-                        projects.Add(userproject.Project);
+                    userproject.Project = db.Projects.Where(p => p.Id == userproject.ProjectId).First();
+                    projects.Add(userproject.Project);
                 }
-                // trimitem proiectele selectate catre view
-                ViewBag.Projects = projects;
             }
 
             // verificam daca exista vreun TempData neafisat
@@ -86,6 +87,37 @@ namespace TheOffice.Controllers
             if (TempData.ContainsKey("message"))
                 ViewBag.Message = TempData["message"].ToString();
 
+            // Afisare paginata
+            int _perPage = 6;
+
+            // Fiind un numar variabil de proiecte, verificam de fiecare data utilizand
+            // metoda Count()
+            int totalItems = projects.Count();
+
+            // Se preia pagina curenta din View-ul asociat
+            // Numarul paginii este valoarea parametrului page din ruta
+            // /Projects/Index?page=valoare
+            var currentPage = Convert.ToInt32(HttpContext.Request.Query["page"]);
+
+            // Pentru prima pagina offsetul o sa fie zero
+            // Pentru pagina 2 o sa fie 3
+            // Asadar offsetul este egal cu numarul de proiecte care au fost deja afisate pe paginile anterioare
+            var offset = 0;
+
+            // Se calculeaza offsetul in functie de numarul paginii la care suntem
+            if (!currentPage.Equals(0))
+            {
+                offset = (currentPage - 1) * _perPage;
+            }
+            // Se preiau proiectele corespunzatoare pentru fiecare pagina la care ne aflam
+            // in functie de offset
+            var paginatedProjects = projects.Skip(offset).Take(_perPage);
+
+            // Preluam numarul ultimei pagini
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)_perPage);
+
+            // Trimitem articolele cu ajutorul unui ViewBag catre View-ul corespunzator
+            ViewBag.Projects = paginatedProjects;
             return View();
         }
 
@@ -479,7 +511,11 @@ namespace TheOffice.Controllers
                 return RedirectToAction("Index");
             }
         }
-
+        [HttpPost]
+        public IActionResult AssignTask(int? id)
+        {
+            return RedirectToAction("Index");
+        }
 
         [NonAction]
         public ICollection<Task> GetTasks(int projectid, string? userid)

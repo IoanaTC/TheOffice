@@ -1,14 +1,29 @@
 ﻿@*Project Cards partial view*@
 
-
+@*
 <img class="card-img-top" src="@Model.Photo" alt="Card image cap">
 
 <div class="card-body">
 
-    <h4 class="card-title text-info">@Model.Title</h4>
+    <h4 class="card-title">@Model.Title</h4>
     <h5 class="text-secondary">@Model.Description</h5><br />
 
     <a href="/Projects/Show/@Model.Id" class="btn btn-outline-primary m-2">Read</a>
 
-</div>
+</div>*@
+
+<a class="card">
+    <img src="@Model.Photo" class="card__image" alt="" />
+    <div class="card__overlay">
+        <div class="card__header">
+            <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
+            <div class="card__header-text">
+                <h3 class="card__title">@Model.Title</h3>
+            </div>
+        </div>
+        <p class="card__description">Citeste</p>
+        
+    </div>
+    <a href="/Projects/Show/@Model.Id" class="stretched-link" visible="hidden">Go somewhere</a>
+</a>
 
