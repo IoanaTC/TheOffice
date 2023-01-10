@@ -1,0 +1,13 @@
+﻿body {
+    margin-bottom: 60px;
+    background-image: url(/images/flower.webp);
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    font-family: 'Marko One', serif;
+    font-size: 14px;
+    color: black;
+    align-items:center;
+    justify-content:center;
+}
