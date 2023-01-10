@@ -30,7 +30,6 @@ namespace TheOffice.Controllers
         }
 
         // Stergerea unui comentariu asociat unui task existent in baza de date
-        [HttpPost]
         [Authorize(Roles = "User,Organizator,Admin")]
         public IActionResult Delete(int id)
         {

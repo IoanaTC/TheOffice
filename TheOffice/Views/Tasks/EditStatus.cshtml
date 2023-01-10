@@ -1,9 +1,9 @@
 ﻿@model TheOffice.Models.Task
-@if(ViewBag.Msg != null)
+@if (ViewBag.Msg != null)
 {
     <h2 class=" alert-danger">@ViewBag.Msg</h2>
 }
-<h2 class="text-center mt-5">Editare status</h2>
+<h2 class="text-center mt-5">Here you can edit the status</h2>
 <br />
 <div class="container mt-5">
     <div class="row">
@@ -13,21 +13,21 @@
             method: FormMethod.Post,
             routeValues: new { id = Model.Id }))
             {
-                <label>Selectati statusul</label>
+                <label>Please select a status</label>
                 @Html.DropDownListFor(m => m.StatusId, new SelectList(Model.Stat, "Value", "Text"),
-                "Selectati statusul", new { @class = "form-control" })
+            "Please select a status", new { @class = "form-control" })
 
                 @Html.ValidationMessageFor(m => m.StatusId, null, new { @class = "text-danger" })
                 <br />
 
                 <br />
 
-                <button class="btn btn-outline-warning m-2" type="submit">Modifica status</button>
+                <button class="btn btn-outline-info m-2" type="submit">Edit status</button>
 
             }
         </div>
     </div>
-</div
+</div>
 
 
 

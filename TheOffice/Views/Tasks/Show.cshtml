@@ -1,37 +1,107 @@
 ﻿@model TheOffice.Models.Task
+<style>
+ .titluTask{
+        text-decoration: overline;
+        text-decoration-color:  #D3756B;
+        text-align: center;
+        font-size: 30px;
+        font-style: italic;
 
-@if(ViewBag.Msg != null)
+ }
+ .flex-container {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+ .flex-container > div {
+        text-align: center;
+        font-size: 18px;
+        text-decoration: underline;
+        text-decoration-color: darkred;
+}
+
+.flex-container2 {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+}
+
+.flex-container2 > div {
+            border-left: 6px solid #D3756B;
+            text-align: center;
+            font-size: 14px;
+            border-radius: 10px;
+            padding: 5px;
+}
+.contentTask{
+       text-align:justify;
+       margin-left: 20px;
+        border-style: double;
+        border-color:antiquewhite;
+        border-radius:6px;
+        border-width: thick;
+        font-size: 20px;
+}
+</style>
+<script>
+    function contentColor(x) {
+        x.style.backgroundColor = "#D3756B";
+        x.style.color = "#fff";
+    }
+
+    function contentColor2(x) {
+        x.style.backgroundColor = "initial";
+        x.style.color = "black";
+    }
+</script>
+
+@if (ViewBag.Msg != null)
 {
     <h2 class="alert-info">@ViewBag.Msg</h2>
 }
 
-<h2>@Model.Title</h2>
+<p class="titluTask">@Model.Title</p>
+
+
+<div class="flex-container2">
+    <div>Belongs to project: @Model.Project.Title</div>
+    @if (@Model.UserId != null)
+    {
+        <div>Assigned to: @Model.User.Email</div>
+    }
+    else
+    {
+        <div>This task hasn't been assigned</div>
+    }
+</div>
 <br />
-<h5>Task-ul face parte din proiectul: @Model.Project.Title</h5>
-@if (@Model.UserId != null){
-    <h5>Responsabilitate task: @Model.User.FirstName</h5>
-}
-else{
-    <h5>Acest task nu este inca asignat!</h5>
-}
-<h3>@Model.Content</h3>
 <br />
 
-@if (@Model.StartDate != null){
-    <h5>Start Date: @Model.StartDate</h5>
-}
+<p style="font-size: 23px; border-left: 6px solid #ebf3ec; border-radius:6px"><i>Task description:</i></p>
+<p class="contentTask" onmouseover="contentColor(this)" onmouseout="contentColor2(this)">@Model.Content</p>
+<br />
 
-<h5>Deadline: @Model.Deadline</h5>
-<h5>Status: @Model.Status.Status_Value</h5>
 
-<a href="/Tasks/EditStatus/@Model.Id" class="btn btn-outline-warning m-2">Edit Status</a>
+<div class="flex-container">
+    <div>Status: @Model.Status.Status_Value</div>
+    <div>Deadline: @Model.Deadline</div>
+    @if (@Model.StartDate != null)
+    {
+        <div>Start Date: @Model.StartDate</div>
+    }
+</div>
+<br />
+
+<a href="/Tasks/EditStatus/@Model.Id" class="btn btn-outline-info m-2">Edit Status</a>
 
 @if (ViewBag.AfisareButoane || ViewBag.EsteAdmin)
 {
-    <a href="/Tasks/Edit/@Model.Id" class="btn btn-outline-warning m-2">Edit Task</a>
+    <a href="/Tasks/Edit/@Model.Id" class="btn btn-outline-info m-2">Edit Task</a>
     <a href="/Tasks/Delete/@Model.Id" class="btn btn-outline-danger m-2">Delete Task</a>
 }
-
+<br />
+<br />
 <h4>Comentarii</h4>
 <br />
 
@@ -61,7 +131,7 @@ else{
 
                         <div>
 
-                        <a class="btn btn-outline-warning m-2" href="/Comments/Edit/@comm.Id"><i class="bi bi-pencil-square"></i>Editeaza</a>
+                            <a class="btn btn-outline-info m-2" href="/Comments/Edit/@comm.Id"><i class="bi bi-pencil-square"></i>Edit</a>
 
                         </div>
 
@@ -69,7 +139,7 @@ else{
 
                             <form method="post" action="/Comments/Delete/@comm.Id">
 
-                                <button class="btn btn-outline-danger m-2" type="submit"><i class="bi bi-trash"></i>Sterge</button>
+                                <button class="btn btn-outline-danger m-2" type="submit"><i class="bi bi-trash"></i>Delete</button>
 
                             </form>
 
@@ -108,7 +178,7 @@ else{
 
                         <input type="hidden" name="TaskId" value="@Model.Id" />
 
-                        <label>Continut comentariu</label>
+                        <label>Comment</label>
                         <br />
 
                         <textarea class="form-control" name="Content"></textarea>
@@ -117,8 +187,8 @@ else{
 
                         <br /><br />
 
-                        <button class="btn btn-outline-primary m-2" type="submit">Adauga comentariul</button>
-                        
+                        <button class="btn btn-outline-info m-2" type="submit">Add comment</button>
+
                     </div>
 
                 </form>
