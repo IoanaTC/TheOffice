@@ -12,6 +12,8 @@ using Task = TheOffice.Models.Task;
 using Project = TheOffice.Models.Project;
 using Humanizer;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Principal;
 
 namespace TheOffice.Controllers
 {
@@ -25,6 +27,7 @@ namespace TheOffice.Controllers
         // managerul de useri si roluri
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         // manager de fisiere
         private IWebHostEnvironment _env;
@@ -36,11 +39,13 @@ namespace TheOffice.Controllers
         public ProjectsController(ApplicationDbContext context, 
                                   RoleManager<IdentityRole> roleManager, 
                                   UserManager<ApplicationUser> userManager,
-                                  IWebHostEnvironment env)
+                                  IWebHostEnvironment env,
+                                  SignInManager<ApplicationUser> signInManager)
         {
             db = context;
             _roleManager = roleManager;
             _userManager = userManager;
+            _signInManager = signInManager;
             _env = env;
         }
 
@@ -268,7 +273,7 @@ namespace TheOffice.Controllers
                 // userul curent primeste rol de Organizator
                 ApplicationUser User = await _userManager.FindByIdAsync(currentUserId);
                 await _userManager.AddToRoleAsync(User, "Organizator");
-
+                await _signInManager.SignInAsync(User, isPersistent: false);
                 return RedirectToAction("Index");
             }
             else
