@@ -11,3 +11,12 @@
     align-items:center;
     justify-content:center;
 }
+.formular {
+    width:100%;
+    border: 2px solid #000;
+    outline: none;
+    background: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 1.2em;
+}
