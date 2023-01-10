@@ -4,8 +4,6 @@
 <!DOCTYPE>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/ProjectsShow.css" asp-append-version="true" />
 
     <script>
@@ -24,11 +22,18 @@
                 event.target.appendChild(document.getElementById(data));
 
                 $.ajax({
-                url: '@Url.Action( "AssignTask", "Projects")',
-                    data: { itemId: data.id,
+                    type: "POST",
+                    url: "/Projects/AssignTask",
+                    dataType:"json",
+                    data: { itemId: data,
                             parentId: event.target.id},
-                    type: 'POST'
-                    
+
+                    succes: function(result){
+                        alert(result.message)
+                    },
+                    error:function(result){
+                        alert("Error")
+                    }  
                 }); 
             }
        
@@ -44,60 +49,64 @@
         <h2 class="alert-success">@ViewBag.Message_task</h2>
     }
     <br />
-    <div class="justify-content-center">
-        <div id="container-header" class="d inline-flex justify-content-center">
-            <div id="container-title"></div>
-                <h2 id="title">@Model.Title</h2><br />
-                <h4 id="content">@Model.Description</h4>
-            </div>
 
-            <img id="photo" src="@Model.Photo" />
+        <div class="container" style="width:100%">
+            <img class="photo" src="@Model.Photo" />
+
+            <h2 class="title">@Model.Title</h2><br />
         </div>
+        <div style="margin-top:10px;">
+            @if (ViewBag.isAdmin == true || ViewBag.isOrganizator == true)
+            {
+                <a href="/Projects/Edit/@Model.Id" class="btn btn-outline-warning m-2">Edit</a>
+                <a href="/Projects/Delete/@Model.Id" class="btn btn-outline-danger m-2">Delete</a>
+                <a href="/Tasks/New?project=@Model.Id" class="btn btn-outline-primary m-2">Add Tasks</a>
+                <a href="/Projects/EditMembers/@Model.Id" class="btn btn-outline-warning m-2">Edit Members</a>
+            }
+        </div>
+        <br />
+        <h3 id="members" style="left:5%;">Despre ce este vorba?</h3>
+        <br />
+
+        <h4 class="content">@Model.Description</h4>
+        <br />
+        <h3 id="members" style="left:5%;">Membrii echipei</h3><br />
     
-    <br />
-    <h3 id="members">Membrii echipei</h3><br />
-    
+        <br />
+        <div class="d-inline-flex justify-content-center">
 
-    <div class="d-inline-flex justify-content-center">
+            @foreach (ApplicationUser member in ViewBag.Members)
+            {
+            <div class="member" id="@member.Id" ondrop="drop(event)" ondragover="allowDrop(event)" class="card m-4" style="width: 18rem;">
 
-        @foreach (ApplicationUser member in ViewBag.Members)
-        {
-            <div class="member" id="@member.Email" ondrop="drop(event)" ondragover="allowDrop(event)" class="card m-4" style="width: 18rem;">
+                    <h4>@member.Email</h4>
 
-                <h4>@member.Email</h4>
+                <div class="d-block-flex" id="@member.Id">
+                        @foreach (Task task in member.Tasks)
+                        {
+                            <partial name="TaskCard" model="task"></partial>
+                        }
+                        <br />
+                    </div>
 
-                <div class="d-block">
-                    @foreach (Task task in member.Tasks)
-                    {
-                        <partial name="TaskCard" model="task"></partial>
-                    }
-                    <br />
+               </div>
+            }
+            <div id="neatribuit"  style="width: 18rem; ">
+                <h4>Taskuri neatribuite</h4>
+
+                <div class="d-block-flex" id="neatribuit">
+                        @foreach (Task task in ViewBag.Tasks)
+                        {
+                            <partial name="TaskCard" model="task"></partial>
+                        }
+                        <br />
+                    </div>
                 </div>
-
-           </div>
-        }
-        <div id="0" ondrop="drop(event)" ondragover="allowDrop(event)" class="card m-4" style="width: 18rem;">
-
-            <div class="d-block">
-                @foreach (Task task in ViewBag.Tasks)
-                {
-                    <partial name="TaskCard" model="task"></partial>
-                }
-                <br />
-            </div>
+        
         </div>
+        <br />
 
-    </div>
-    <br />
-
-    <br />
-    @if (ViewBag.isAdmin == true || ViewBag.isOrganizator == true)
-    {
-        <a href="/Projects/Edit/@Model.Id" class="btn btn-outline-warning m-2">Edit</a>
-        <a href="/Projects/Delete/@Model.Id" class="btn btn-outline-danger m-2">Delete</a>
-        <a href="/Tasks/New?project=@Model.Id" class="btn btn-outline-primary m-2">Add Tasks</a>
-        <a href="/Projects/EditMembers/@Model.Id" class="btn btn-outline-warning m-2">Edit Members</a>
-    }
-    </div>
+        <br />
+        
 </body>
 </html>
