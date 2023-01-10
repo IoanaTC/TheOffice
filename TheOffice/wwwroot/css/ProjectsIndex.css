@@ -43,7 +43,7 @@
     z-index: 1;
     border-radius: calc(var(--curve) * 1px);
     /*  background-color: var(--surface-color);*/
-    background-color: #ebf3ec;
+    background-color: #ffeedf;
     transform: translateY(100%);
     transition: .2s ease-in-out;
 }
@@ -60,7 +60,7 @@
     padding: 2em;
     border-radius: calc(var(--curve) * 1px) 0 0 0;
     /*background-color: var(--surface-color);*/
-    background-color: #ebf3ec;
+    background-color: #ffeedf;
     transform: translateY(-100%);
     transition: .2s ease-in-out;
     border-width: 20px;
@@ -78,7 +78,7 @@
 
 .card__arc path {
     /*fill: var(--surface-color);*/
-    fill: #ebf3ec;
+    fill: #ffeedf;
     d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
 }       
 
@@ -90,7 +90,7 @@
 .card__title {
     font-size: 1em;
     margin: 0 0 .3em;
-    background-color: #ebf3ec;
+    background-color: #ffeedf;
     font-family: 'Marko One', serif;
     font-size: 21px;
     color: black;
@@ -103,7 +103,7 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
     overflow: hidden;
-    background-color: #ebf3ec;
+    background-color: #ffeedf;
     font-family: 'Marko One', serif;
     font-size: 17px;
     color: black;

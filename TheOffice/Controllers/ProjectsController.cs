@@ -264,6 +264,11 @@ namespace TheOffice.Controllers
                 // informam userul ca modificarea a fost realizata
                 TempData["message"] = "Proiectul a fost adaugat";
 
+
+                // userul curent primeste rol de Organizator
+                ApplicationUser User = await _userManager.FindByIdAsync(currentUserId);
+                await _userManager.AddToRoleAsync(User, "Organizator");
+
                 return RedirectToAction("Index");
             }
             else
@@ -273,7 +278,6 @@ namespace TheOffice.Controllers
                 return View(requestProject);
             }
         }
-
 
         // metoda edit cu get
         [Authorize(Roles = "Organizator,Admin")]
@@ -512,9 +516,22 @@ namespace TheOffice.Controllers
             }
         }
         [HttpPost]
-        public IActionResult AssignTask(int? id)
+        public JsonResult AssignTask(int itemId, string parentId)
         {
-            return RedirectToAction("Index");
+            Console.WriteLine(itemId+" "+parentId);
+
+            var parent = db.Users.Where(user => user.Id == parentId);
+            if (parent != null)
+            {
+                var task = db.Tasks.Include("User")
+                         .Where(task => task.Id == itemId).First();
+
+                task.UserId = parentId;
+
+                db.SaveChanges();
+            }
+
+            return Json(new { message = "Succes" });
         }
 
         [NonAction]
