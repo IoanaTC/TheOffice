@@ -1,0 +1,18 @@
+﻿<h2>Editeaza drepturi</h2>
+<br />
+
+<form enctype="multipart/form-data" asp-controller="Projects" asp-action="admin">
+
+    @for (var i=0; i< ViewBag.Users.Count; i++)
+    {
+        @foreach(string role in ViewBag.Roles[i]){
+            <input name="newRoles" type="checkbox" value="@role" checked/> @role
+
+        }
+
+        <br />
+    }
+    <button class="btn btn-success" type="submit"> Submit </button>
+
+</form>
+<br />

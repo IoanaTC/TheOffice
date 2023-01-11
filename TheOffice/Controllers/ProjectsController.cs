@@ -10,8 +10,8 @@ using System.Data;
 
 using Task = TheOffice.Models.Task;
 using Project = TheOffice.Models.Project;
-using Humanizer;
-using System.Text.RegularExpressions;
+/*using Humanizer;
+*/using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Principal;
 
@@ -538,6 +538,33 @@ namespace TheOffice.Controllers
 
             return Json(new { message = "Succes" });
         }
+        [HttpGet]
+        [Authorize(Roles ="Admin")]
+        public async Task<IActionResult> admin()
+        {
+            // selectam userul curent
+            currentUserId = _userManager.GetUserId(User);
+            var users = db.Users.Where(user => user.Id != currentUserId).ToList();
+
+            ViewBag.Users = users;
+
+            for(var i=0; i<users.Count; i++)
+            {
+                var user = await _userManager.FindByIdAsync(users[i].Id);
+                var roles = await _userManager.GetRolesAsync(user);
+
+                Console.WriteLine(roles);
+                ViewBag.Roles[i] = roles;
+            }
+            return View();
+        }
+
+        /*[HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> admin(List<string> newUsers)
+        {
+
+        }*/
 
         [NonAction]
         public ICollection<Task> GetTasks(int projectid, string? userid)
